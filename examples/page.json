@@ -13,6 +13,10 @@
 		{"thumb": "thumbnails/heidentor.png", "label": "Heidentor", "url": "heidentor.html"},
 		{"thumb": "thumbnails/lion.png", "label": "Lion", "url": "lion.html"},
 		{"thumb": "thumbnails/lion_las.png", "label": "Lion LAS", "url": "lion_las.html"},
+		
+		{"thumb": "thumbnails/longdress.png", "label": "Longdress Static", "url": "longdress_static.html"},
+		{"thumb": "thumbnails/redandblack.png", "label": "Redandblack Static", "url": "redandblack_static.html"},
+		{"thumb": "thumbnails/longdress.png", "label": "Longdress Dynamic", "url": "longdress_dynamic.html"},
 
 		{"thumb": "thumbnails/lion_las.png", "label": "Lion LAZ", "url": "lion_laz.html"},
 		{"thumb": "thumbnails/lion.png", "label": "EPT", "url": "ept.html"},
