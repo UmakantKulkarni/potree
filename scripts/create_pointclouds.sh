@@ -20,3 +20,5 @@ do
     $potreeConverter_path $input_folder/${model}_vox10_${frame_num}.las -o $output_dir/$frame_num/
     rm -f $input_folder/${model}_vox10_${frame_num}.las
 done
+
+#rm -rf $mydir/pcs_dataset/$model
