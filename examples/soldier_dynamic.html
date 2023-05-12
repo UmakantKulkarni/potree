@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="utf-8">
 	<meta name="description" content="">
@@ -18,8 +19,8 @@
 	<script src="../libs/jquery/jquery-3.1.1.min.js"></script>
 	<script src="../libs/spectrum/spectrum.js"></script>
 	<script src="../libs/jquery-ui/jquery-ui.min.js"></script>
-	
-	
+
+
 	<script src="../libs/other/BinaryHeap.js"></script>
 	<script src="../libs/tween/tween.min.js"></script>
 	<script src="../libs/d3/d3.js"></script>
@@ -29,48 +30,106 @@
 	<script src="../libs/jstree/jstree.js"></script>
 	<script src="../build/potree/potree.js"></script>
 	<script src="../libs/plasio/js/laslaz.js"></script>
-	
+
 	<!-- INCLUDE ADDITIONAL DEPENDENCIES HERE -->
 	<!-- INCLUDE SETTINGS HERE -->
-	
+
 	<div class="potree_container" style="position: absolute; width: 100%; height: 100%; left: 0px; top: 0px; ">
-		<div id="potree_render_area" style="background-image: url('../build/potree/resources/images/background.jpg');"></div>
+		<div id="potree_render_area" style="background-image: url('../build/potree/resources/images/background.jpg');">
+		</div>
 		<div id="potree_sidebar_container"> </div>
 	</div>
-	
+
 	<script type="module">
 
-	import * as THREE from "../libs/three.js/build/three.module.js";
-	
+		import * as THREE from "../libs/three.js/build/three.module.js";
+
 		window.viewer = new Potree.Viewer(document.getElementById("potree_render_area"));
-		
+
 		viewer.setEDLEnabled(true);
 		viewer.setFOV(60);
 		viewer.setPointBudget(10_000_000);
 		viewer.useHQ = true;
 		viewer.loadSettingsFromURL();
-		
+
 		viewer.setDescription("");
-		
+
 		viewer.loadGUI(() => {
 			viewer.setLanguage('en');
 			$("#menu_appearance").next().show();
 			//viewer.toggleSidebar();
 		});
-		
-		// Netherland
-		Potree.loadPointCloud("../pointclouds/longdress_static/metadata.json", "longdress_static", function(e){
+
+		//https://github.com/potree/potree/issues/413
+		const startFrame = 536;
+		const EndFrame = 835;
+		var actual_fps = 30;
+		var play_fps = 1;
+		var incrementor = parseInt(actual_fps / play_fps)
+		var sleepTime = 1000 / play_fps;
+		const runTume = 360;
+		var pos1 = [376.00, 46.00, 320.00];
+		var pos2 = [190.00, 248.00, 234.00];
+		var pos3 = [310.00, 406.00, 330.00];
+		var pos4 = [265.00, 612.00, 378.00];
+		var pos5 = [243.00, 706.00, 431.00];
+		var pos6 = [254.00, 471.00, 451.00];
+		var pos7 = [249.00, 906.00, 351.00];
+		var povs = [];
+		povs.push(pos1, pos2, pos3, pos4, pos5, pos6, pos7);
+		var arrayLength = povs.length;
+		for (var p = 0; p < arrayLength; p++) {
+			const myName = "POV" + p.toString();
+			var myPos = povs[p].map(function (value) {
+				return value + 10;
+			});
+			let aAbout = new Potree.Annotation({
+				position: myPos,
+				title: myName,
+				cameraPosition: myPos,
+				cameraTarget: myPos,
+				description: `<ul>${myName}</ul>`
+			});
+			viewer.scene.annotations.add(aAbout);
+		}
+		Potree.loadPointCloud(`../pointclouds/soldier_dynamic/${startFrame}/metadata.json`, "soldier_dynamic", function (e) {
 			viewer.scene.addPointCloud(e.pointcloud);
-			
+
 			let material = e.pointcloud.material;
 			material.size = 1;
 			material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
-			
+
 			viewer.fitToScreen();
 		});
-		
+		await new Promise(r => setTimeout(r, sleepTime));
+		viewer.scene.scenePointCloud.children.pop();
+		let i = 0;
+		while (i < runTume) {
+			if (i === 0) {
+				var frame_num = startFrame + 1;
+			} else {
+				var frame_num = startFrame;
+			}
+			while (frame_num < EndFrame + 1) {
+				Potree.loadPointCloud(`../pointclouds/soldier_dynamic/${frame_num}/metadata.json`, "soldier_dynamic", function (e) {
+					viewer.scene.addPointCloud(e.pointcloud);
+
+					let material = e.pointcloud.material;
+					material.size = 1;
+					material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
+
+					//viewer.fitToScreen();
+				});
+				await new Promise(r => setTimeout(r, sleepTime));
+				viewer.scene.scenePointCloud.children.pop();
+				frame_num = frame_num + incrementor
+			}
+			i++;
+		}
+
 	</script>
-	
-	
-  </body>
+
+
+</body>
+
 </html>

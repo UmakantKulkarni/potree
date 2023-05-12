@@ -22,23 +22,17 @@ cd pcs_dataset
 
 #Static point cloud dataset - https://mpeg-pcc.org/index.php/pcc-content-database/8i-voxelized-surface-light-field-8ivslf-dataset/
 
-wget https://mpeg-pcc.org/Downloads/8i/single%20frame/longdress_viewdep_vox12.zip
-unzip longdress_viewdep_vox12.zip
-pdal translate longdress_viewdep_vox12.ply longdress_viewdep_vox12.las
-mkdir -p $mydir/potree/pointclouds/longdress_static
-$mydir/PotreeConverter/build/PotreeConverter longdress_viewdep_vox12.las -o $mydir/potree/pointclouds/longdress_static/
-
-wget https://mpeg-pcc.org/Downloads/8i/single%20frame/redandblack_viewdep_vox12.zip
-unzip redandblack_viewdep_vox12.zip
-pdal translate redandblack_viewdep_vox12.ply redandblack_viewdep_vox12.las
-mkdir -p $mydir/potree/pointclouds/redandblack_static
-$mydir/PotreeConverter/build/PotreeConverter redandblack_viewdep_vox12.las -o $mydir/potree/pointclouds/redandblack_static/
+wget https://mpeg-pcc.org/Downloads/8i/single%20frame/soldier_viewdep_vox12.zip
+unzip soldier_viewdep_vox12.zip
+pdal translate soldier_viewdep_vox12.ply soldier_viewdep_vox12.las
+mkdir -p $mydir/potree/pointclouds/soldier_static
+$mydir/PotreeConverter/build/PotreeConverter soldier_viewdep_vox12.las -o $mydir/potree/pointclouds/soldier_static/
 
 #Dynamic Point cloud dataset - http://plenodb.jpeg.org/pc/8ilabs
-wget http://plenodb.jpeg.org/pc/8ilabs/longdress.zip
-unzip longdress.zip
+wget http://plenodb.jpeg.org/pc/8ilabs/soldier.zip
+unzip soldier.zip
 
-rm -f longdress_viewdep_vox12.ply longdress_viewdep_vox12.las redandblack_viewdep_vox12.ply redandblack_viewdep_vox12.las 
+rm -f soldier_viewdep_vox12.ply soldier_viewdep_vox12.las
 
 #https://geotiles.nl/
 #wget https://ns_hwh.fundaments.nl/hwh-ahn/AHN3/LAZ/C_25GN1.LAZ

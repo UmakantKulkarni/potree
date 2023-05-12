@@ -46,7 +46,7 @@
 
 		window.viewer = new Potree.Viewer(document.getElementById("potree_render_area"));
 
-		viewer.setEDLEnabled(true);
+		viewer.setEDLEnabled(false);
 		viewer.setFOV(60);
 		viewer.setPointBudget(10_000_000);
 		viewer.useHQ = true;
@@ -60,15 +60,18 @@
 			//viewer.toggleSidebar();
 		});
 
-		//https://github.com/potree/potree/issues/413
-		const startFrame = 1051;
-		const EndFrame = 1350;
-		var actual_fps = 30;
-		var play_fps = 1;
-		var incrementor = parseInt(actual_fps / play_fps)
-		var sleepTime = 1000 / play_fps;
-		const runTume = 360;
-		Potree.loadPointCloud(`../pointclouds/longdress_dynamic/${startFrame}/metadata.json`, "longdress_dynamic", function (e) {
+		var pos1 = [1242.00, 49.00, 1434.00];
+		var pos2 = [796.00, 3537.00, 1211.00];
+		var pos3 = [1184.00, 2847.00, 871.00];
+		var pos4 = [537.00, 2811.00, 1223.00];
+		var pos5 = [330.00, 1142.00, 552.00];
+		var pos6 = [505.00, 1502.00, 1223.00];
+		var pos7 = [724.00, 2121.00, 898.00];
+		var povs = [];
+		povs.push(pos1, pos2, pos3, pos4, pos5, pos6, pos7);
+		var arrayLength = povs.length;
+
+		Potree.loadPointCloud("../pointclouds/soldier_static/metadata.json", "soldier_static", function (e) {
 			viewer.scene.addPointCloud(e.pointcloud);
 
 			let material = e.pointcloud.material;
@@ -76,32 +79,23 @@
 			material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
 
 			viewer.fitToScreen();
+			{
+				for (var p = 0; p < arrayLength; p++) {
+					const myName = "POV" + p.toString();
+					var myPos = povs[p].map(function (value) {
+						return value + 10;
+					});
+					let aAbout = new Potree.Annotation({
+						position: myPos,
+						title: myName,
+						cameraPosition: myPos,
+						cameraTarget: myPos,
+						description: `<ul>${myName}</ul>`
+					});
+					viewer.scene.annotations.add(aAbout);
+				}
+			}
 		});
-		await new Promise(r => setTimeout(r, sleepTime));
-		viewer.scene.scenePointCloud.children.pop();
-		let i = 0;
-		while (i < runTume) {
-			if (i === 0) {
-				var frame_num = startFrame + 1;
-			} else {
-				var frame_num = startFrame;
-			}
-			while (frame_num < EndFrame + 1) {
-				Potree.loadPointCloud(`../pointclouds/longdress_dynamic/${frame_num}/metadata.json`, "longdress_dynamic", function (e) {
-					viewer.scene.addPointCloud(e.pointcloud);
-
-					let material = e.pointcloud.material;
-					material.size = 1;
-					material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
-
-					//viewer.fitToScreen();
-				});
-				await new Promise(r => setTimeout(r, sleepTime));
-				viewer.scene.scenePointCloud.children.pop();
-				frame_num = frame_num + incrementor
-			}
-			i++;
-		}
 
 	</script>
 
