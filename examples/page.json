@@ -17,6 +17,7 @@
 		{"thumb": "thumbnails/soldier.png", "label": "Soldier Static", "url": "soldier_static.html"},
 		{"thumb": "thumbnails/dc.png", "label": "DC Static", "url": "dc_static.html"},
 		{"thumb": "thumbnails/soldier.png", "label": "Soldier Dynamic", "url": "soldier_dynamic.html"},
+		{"thumb": "thumbnails/soldier.png", "label": "Dynamic Data", "url": "dynamic_data.html"},
 
 		{"thumb": "thumbnails/lion_las.png", "label": "Lion LAZ", "url": "lion_laz.html"},
 		{"thumb": "thumbnails/lion.png", "label": "EPT", "url": "ept.html"},

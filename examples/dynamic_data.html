@@ -44,14 +44,17 @@
 
 		import * as THREE from "../libs/three.js/build/three.module.js";
 
+		const queryString = window.location.search;
+		const urlParams = new URLSearchParams(queryString);
+		const frame_num = urlParams.get('frame_num')
+		console.log(frame_num);
 		window.viewer = new Potree.Viewer(document.getElementById("potree_render_area"));
 
-		viewer.setEDLEnabled(false);
+		viewer.setEDLEnabled(true);
 		viewer.setFOV(60);
 		viewer.setPointBudget(50_000);
 		viewer.useHQ = true;
 		viewer.loadSettingsFromURL();
-
 		viewer.setDescription("");
 
 		viewer.loadGUI(() => {
@@ -59,19 +62,9 @@
 			$("#menu_appearance").next().show();
 			//viewer.toggleSidebar();
 		});
+		viewer.setView('D');
 
-		var pos1 = [1242.00, 49.00, 1434.00];
-		var pos2 = [796.00, 3537.00, 1211.00];
-		var pos3 = [1184.00, 2847.00, 871.00];
-		var pos4 = [330.00, 1142.00, 552.00];
-		var pos5 = [505.00, 1502.00, 1223.00];
-		var pos6 = [724.00, 2121.00, 898.00];
-		var povs = [];
-		var target = [2047.5, 2047.5, 2047.5]
-		povs.push(pos1, pos2, pos3, pos4, pos5, pos6);
-		var arrayLength = povs.length;
-
-		Potree.loadPointCloud("../pointclouds/soldier_static/metadata.json", "soldier_static", function (e) {
+		Potree.loadPointCloud(`../pointclouds/soldier_dynamic/${frame_num}/metadata.json`, "soldier_dynamic", function (e) {
 			viewer.scene.addPointCloud(e.pointcloud);
 
 			let material = e.pointcloud.material;
@@ -79,22 +72,6 @@
 			material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
 
 			viewer.fitToScreen();
-			{
-				for (var p = 0; p < arrayLength; p++) {
-					const myName = "POV" + p.toString();
-					var myPos = povs[p].map(function (value) {
-						return value + 10;
-					});
-					let aAbout = new Potree.Annotation({
-						position: myPos,
-						title: myName,
-						cameraPosition: myPos,
-						cameraTarget: target,
-						description: `<ul>${myName}</ul>`
-					});
-					viewer.scene.annotations.add(aAbout);
-				}
-			}
 		});
 
 	</script>
